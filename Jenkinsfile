@@ -7,6 +7,7 @@ pipelineDefault.run({
   stage('Deploy') {
       sh '''
         imageName=`dind-docker-image-name -b "${GIT_BRANCH}" -c "${GIT_COMMIT}" -r "${DOCKER_IMAGE_REPO}"`
+        dind-docker-build -n "${imageName}"
         dind-docker-push -n "${imageName}"
         dind-notify-dingtalk -a "${DINGTALK_ACCESS_TOKEN}" -m "${DINGTALK_MOBILES}" -t "$(dind-notify-text -t docker-push-complete)"
       '''
